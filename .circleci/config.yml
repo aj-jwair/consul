@@ -95,6 +95,11 @@ jobs:
           at: /go/bin
       - run: sudo apt-get update && sudo apt-get install -y rsyslog
       - run: sudo service rsyslog start
+      - run: &install_gotestsum
+          name: Install gotestsum
+          command: |
+            curl -sSL https://github.com/gotestyourself/gotestsum/releases/download/v0.4.2/gotestsum_0.4.2_linux_amd64.tar.gz | \
+              sudo tar -xz --overwrite -C /usr/local/bin gotestsum
       - run: go mod download
       - run:
           name: go test
@@ -131,6 +136,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: /go/bin
+      - run: *install_gotestsum
       - run:
           working_directory: api
           command: go mod download
@@ -162,6 +168,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: /go/bin
+      - run: *install_gotestsum
       - run:
           working_directory: sdk
           command: go mod download
